@@ -72,25 +72,25 @@ cat client.crt.pem chain.crt.pem > client.chain.crt.pem
 
 #### Step 4: Base64-encode client certs and key
 
-Base64 client certs and copy and paste output as CLIENT_KEY.
+Base64 client certs. Output will be passed to container as as `CLIENT_CRT` environment variable.
 
 Linux / Mac OS command:
 ```
-base64 -i client.chain.crt
+base64 -i client.chain.crt.pem
 ```
 Copy and paste above output into CLIENT_CRT in .env.pki so it will have.....
 ```
 CLIENT_CRT=<<your pasted base64 text>>
 ```
 
-Do the same thing for CLIENT_KEY
+Base64 client key. Output will be passed to container as as `CLIENT_KEY` environment variable.
 
 Linux / Mac OS command:
 ```
 base64 -i client.key
 ```
 
-Copy and paste above output into CLIENT_KEY in .env.pki so it will have.....
+Copy and paste above output into `CLIENT_KEY` in .env.pki so it will have.....
 ```
 CLIENT_KEY=<<your pasted base64 text>>
 ```
