@@ -1,0 +1,2 @@
+# Exclude sensitive information
+.env.pki
