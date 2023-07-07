@@ -1,0 +1,31 @@
+ListenUDP 		*:1812
+ListenUDP 		*:1813
+
+LogLevel		5
+LogDestination file:///dev/stdout
+
+tls OR-certs-anp {
+    CACertificateFile ${PKI_DIR}/ca.crt
+    CertificateFile   ${PKI_DIR}/client.chain.crt
+    CertificateKeyFile ${PKI_DIR}/client.key
+    TLSVersion TLS1_2:
+}
+
+server OR-dynamic {
+    type tls
+    tls OR-certs-anp
+    secret radsec
+    certificateNameCheck off
+    dynamicLookupCommand ${RADSECPROXY_DIR}/naptr-openroaming.sh
+}
+
+realm * { 
+    server OR-dynamic
+    accountingServer OR-dynamic
+} 
+
+client 0.0.0.0/0 {
+    type udp
+    secret ${LOCAL_SHARED_SECRET}
+}
+

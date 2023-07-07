@@ -1,0 +1,17 @@
+version: "3"
+services:
+    server:
+        build:
+            context: .
+        ports:
+          - target: 1812
+            published: 1812 #CONFIGURE: Local RADIUS authentication port
+            protocol: udp
+          - target: 1813
+            published: 1813 #CONFIGURE: Local RADIUS accounting port
+            protocol: udp
+        container_name: openroaming-proxy
+        environment:
+            LOCAL_SHARED_SECRET: secret #CONFIGURE: RADIUS shared secret
+        env_file:
+          - ./.env.pki #CONFIGURABLE (inside file): client key and cert
