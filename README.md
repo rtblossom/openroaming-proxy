@@ -14,7 +14,7 @@
 Set as environment variables:
   1. LOCAL_SHARED_SECRET: RADIUS shared secret (defaults to secret)
   2. CLIENT_KEY: Client key (base64-encoded pem file)
-  3. CLIENT_CRT: Client certificate that is sent over RadSec (base64-encoded pem file, needs to have client cert on top)
+  3. CLIENT_CRT: Client certificate chain that is sent over RadSec (base64-encoded pem file, needs to have client cert on top)
 
 Set in docker-compose file:
   1. Published RADIUS authentication port (defaults to 1812)
@@ -48,7 +48,7 @@ LOCAL_SHARED_SECRET: super_secret #CONFIGURE: RADIUS shared secret
 #### Step 1: Create an environment file to store certificates and key
 Certificates and private key are passed to the container as environment variables. We need to create an environment variables file to store this information.
 
-Make a copy of the .env.pki.stub file and name it .env.pki.
+Make a copy of the `.env.pki.stub` file and name it `.env.pki`.
 
 Linux / Mac OS command:
 ```
@@ -72,25 +72,25 @@ cat client.crt.pem chain.crt.pem > client.chain.crt.pem
 
 #### Step 4: Base64-encode client certs and key
 
-Base64 client certs. Output will be passed to container as as `CLIENT_CRT` environment variable.
+Base64 client certs. Output will be passed to container as `CLIENT_CRT` environment variable.
 
 Linux / Mac OS command:
 ```
 base64 -i client.chain.crt.pem
 ```
-Copy and paste above output into CLIENT_CRT in .env.pki so it will have.....
+Copy and paste above output into `CLIENT_CRT` in `.env.pki` so it will have.....
 ```
 CLIENT_CRT=<<your pasted base64 text>>
 ```
 
-Base64 client key. Output will be passed to container as as `CLIENT_KEY` environment variable.
+Base64 client key. Output will be passed to container as `CLIENT_KEY` environment variable.
 
 Linux / Mac OS command:
 ```
 base64 -i client.key
 ```
 
-Copy and paste above output into `CLIENT_KEY` in .env.pki so it will have.....
+Copy and paste above output into `CLIENT_KEY` in `.env.pki` so it will have.....
 ```
 CLIENT_KEY=<<your pasted base64 text>>
 ```
