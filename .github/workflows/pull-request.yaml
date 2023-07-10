@@ -17,6 +17,10 @@ jobs:
         run: |
           echo 'naptr-record=testrealm.net,50,50,s,aaa+auth:radius.tls.tcp,"",_radiustls._tcp.testrealm.net' > /tmp/test.dnsmasq.config
           echo 'srv-host=_radiustls._tcp.testrealm.net,testing.net,2083,0,10' >> /tmp/test.dnsmasq.config
+      - name: Get list of services
+        run: sudo systemctl
+      - name: Kill dnsmasq
+        run: sudo systemctl stop dnsmasq
       - name: Start dnsmasq
         run: sudo /usr/sbin/dnsmasq -C /tmp/test.dnsmasq.config
       - name: Set nameserver to 127.0.0.1
