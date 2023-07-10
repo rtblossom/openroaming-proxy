@@ -11,8 +11,7 @@ name: Publish Docker image
 
 on:
   push:
-    branches:
-      - main
+    tags: [ v* ]
 
 jobs:
   push_to_registry:
@@ -33,13 +32,14 @@ jobs:
         uses: docker/metadata-action@818d4b7b91585d195f67373fd9cb0332e31a7175
         with:
           images: rbsdi/openroaming-proxy
+
       - name: Build and push Docker image
         uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: rbsdi/openroaming-proxy:latest
+          tags: rbsdi/openroaming-proxy:latest, {{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           tag_with_sha: true
 
