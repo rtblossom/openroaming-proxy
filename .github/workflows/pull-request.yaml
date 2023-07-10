@@ -24,7 +24,7 @@ jobs:
       - name: Start dnsmasq
         run: sudo /usr/sbin/dnsmasq -C /tmp/test.dnsmasq.config
       - name: Set nameserver to 127.0.0.1
-        run: sudo su && echo "nameserver 127.0.0.1" > /etc/resolv.conf
+        run: sudo bash && echo "nameserver 127.0.0.1" > /etc/resolv.conf
       - name: verify config file was produced by naptr-openroaming.sh
         run: |
           ./config/naptr-openroaming.sh testrealm.net > /tmp/test.radsecproxy.config
