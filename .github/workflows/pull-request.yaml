@@ -1,0 +1,37 @@
+name: pull request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test_dns_lookup_script:
+    name: Test DNS Lookup Script
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install -y dnsutils dnsmasq
+      - name: Create Dnsmasq config
+        run: |
+          echo 'naptr-record=testrealm.net,50,50,s,aaa+auth:radius.tls.tcp,"",_radiustls._tcp.testrealm.net' > /tmp/test.dnsmasq.config
+          echo 'srv-host=_radiustls._tcp.testrealm.net,testing.net,2083,0,10' >> /tmp/test.dnsmasq.config
+      - name: Get list of services
+        run: sudo systemctl
+      - name: Stop DNS listener
+        run: sudo systemctl stop systemd-resolved
+      - name: Start dnsmasq
+        run: sudo /usr/sbin/dnsmasq -C /tmp/test.dnsmasq.config
+      - name: Set nameserver to 127.0.0.1
+        run: |
+          echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf.DNSoverride
+          sudo ln -sf /etc/resolv.conf.DNSoverride /etc/resolv.conf
+          cat /etc/resolv.conf 
+      - name: verify config file was produced by naptr-openroaming.sh
+        run: |
+          ./config/naptr-openroaming.sh testrealm.net > /tmp/test.radsecproxy.config
+          echo "::debug::test config=$(cat /tmp/test.radsecproxy.config)"
+          perl -pe 's/\n/\\n/g' /tmp/test.radsecproxy.config | \
+          grep 'server dynamic_radsec.testrealm.net {\\n.*host testing.net:2083\\n.*type TLS\\n}\\n'
+
