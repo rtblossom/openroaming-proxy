@@ -39,8 +39,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: rbsdi/openroaming-proxy:latest, {{ steps.meta.outputs.tags }}
+          tags: rbsdi/openroaming-proxy:latest, ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          tag_with_sha: true
 
 
