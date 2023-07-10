@@ -12,7 +12,7 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - main
+      - docker_actions
 
 jobs:
   push_to_registry:
@@ -41,5 +41,5 @@ jobs:
           file: ./Dockerfile
           push: true
           labels: ${{ steps.meta.outputs.labels }}
-          tags: main,latest
+          tags: latest
           tag_with_sha: true
