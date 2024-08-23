@@ -5,7 +5,7 @@ LogLevel		5
 LogDestination file:///dev/stdout
 
 tls OR-certs-anp {
-    CACertificateFile ${PKI_DIR}/ca.crt
+    CACertificatePath ${CA_DIR}
     CertificateFile   ${PKI_DIR}/client.chain.crt
     CertificateKeyFile ${PKI_DIR}/client.key
     TLSVersion TLS1_2:
@@ -19,10 +19,10 @@ server OR-dynamic {
     dynamicLookupCommand ${RADSECPROXY_DIR}/naptr-openroaming.sh
 }
 
-realm * { 
+realm * {
     server OR-dynamic
     accountingServer OR-dynamic
-} 
+}
 
 client 0.0.0.0/0 {
     type udp
